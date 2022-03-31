@@ -9,7 +9,7 @@ swimLaneTemplate.innerHTML = `
             <input class="content-input" hidden type="text" value="Task"/>
             <span class="content-display">Task</span>
         </div>
-        <button class="deleteTodoItemBtn">-</button>
+        <button class="delete-todo-item-btn">-</button>
     </div>
 `;
 
@@ -20,6 +20,7 @@ export class TodoItemComponent extends HTMLElement {
         this.shadowRoot.appendChild(swimLaneTemplate.content.cloneNode(true));
 
         this.editingContent = false;
+        this.mouseDownEl = null;
 
         this.todoItem = this.shadowRoot.querySelector(".todo-item");
 
@@ -27,6 +28,9 @@ export class TodoItemComponent extends HTMLElement {
         this.contentInput = this.todoContent.querySelector(".content-input");
         this.contentDisplay =
             this.todoContent.querySelector(".content-display");
+        this.deleteTodoItemBtn = this.todoItem.querySelector(
+            ".delete-todo-item-btn"
+        );
     }
 
     connectedCallback() {
@@ -38,16 +42,39 @@ export class TodoItemComponent extends HTMLElement {
             this.todoItemClicked(e)
         );
 
-        console.log(this.parentNode);
+        document.addEventListener("mousedown", (e) => this.documentClicked(e));
+
+        this.deleteTodoItemBtn.addEventListener("click", (e) =>
+            this.deleteTodoItem(e)
+        );
+    }
+
+    deleteTodoItem(e) {
+        e.stopPropagation();
+        let todoItem = this;
+        if (todoItem.parentNode) {
+            //let parentSwimLane = task.parentNode.parentNode.parentNode.host;
+            //TaskBoardDataService.deleteTask(parentSwimLane, task);
+            todoItem.parentNode.removeChild(todoItem);
+        }
     }
 
     //#region Edit Content
 
     todoItemClicked(e) {
-        let mouseDownEl = e.target;
-        if (!mouseDownEl.matches(".content-input") && this.editingContent) {
+        this.mouseDownEl = e.target;
+    }
+
+    documentClicked(e) {
+        if (
+            !this.mouseDownEl ||
+            (this.mouseDownEl &&
+                !this.mouseDownEl.matches(".content-input") &&
+                this.editingContent)
+        ) {
             this.saveContent(e);
         }
+        this.mouseDownEl = null;
     }
 
     editContent(e) {
