@@ -20,3 +20,25 @@
     justify-content: center;
     flex-direction: column;
 }
+
+.add-todo-item-btn {
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    border-radius: 50%;
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-style: none;
+    background: var(--primary-color);
+    box-shadow: var(--shadow);
+    transition: all 500ms;
+}
+
+.add-todo-item-btn:hover {
+    background: var(--button-hover);
+    transform: rotate(90deg);
+}
+
+.add-todo-item-btn:active {
+    background: var(--button-active);
+}

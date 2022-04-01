@@ -4,12 +4,13 @@ swimLaneTemplate.innerHTML = `
         @import url('./src/components/todoItemComponent.css')
     </style>
     <div class="todo-item">
-        <input type="checkbox"/>
+        <input class="content-check" type="checkbox"/>
         <div class="todo-content">
             <input class="content-input" hidden type="text" value="Task"/>
             <span class="content-display">Task</span>
         </div>
-        <button class="delete-todo-item-btn">-</button>
+        <div class="spacer"></div>
+        <button class="delete-todo-item-btn">✕</button>
     </div>
 `;
 

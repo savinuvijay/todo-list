@@ -7,4 +7,41 @@
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
+    width: 250px;
+}
+
+.todo-content {
+    margin: 0 10px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.content-input {
+    border-style: none;
+    border-radius: 3px;
+    font-weight: bold;
+    height: 20px;
+    box-shadow: var(--shadow);
+}
+
+.delete-todo-item-btn {
+    padding: 0 5px;
+    border-radius: 3px;
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-style: none;
+    background: var(--accent-color);
+    box-shadow: var(--shadow);
+    color: var(--primary-color);
+    transition: all 500ms;
+}
+
+.delete-todo-item-btn:hover {
+    background: var(--button-accent-hover);
+}
+
+.delete-todo-item-btn:active {
+    background: var(--button-accent-active);
 }
