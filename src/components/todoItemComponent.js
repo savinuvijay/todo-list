@@ -1,13 +1,15 @@
+import { TodoListDataService } from "../services/todoListService.js";
+
 const swimLaneTemplate = document.createElement("template");
 swimLaneTemplate.innerHTML = `
     <style>
         @import url('./src/components/todoItemComponent.css')
     </style>
     <div class="todo-item">
-        <input class="content-check" type="checkbox"/>
+        <input class="todo-check" type="checkbox"/>
         <div class="todo-content">
-            <input class="content-input" hidden type="text" value="Task"/>
-            <span class="content-display">Task</span>
+            <input class="content-input" hidden type="text"/>
+            <span class="content-display"></span>
         </div>
         <div class="spacer"></div>
         <button class="delete-todo-item-btn">✕</button>
@@ -25,6 +27,7 @@ export class TodoItemComponent extends HTMLElement {
 
         this.todoItem = this.shadowRoot.querySelector(".todo-item");
 
+        this.todoCheck = this.todoItem.querySelector(".todo-check");
         this.todoContent = this.todoItem.querySelector(".todo-content");
         this.contentInput = this.todoContent.querySelector(".content-input");
         this.contentDisplay =
@@ -35,6 +38,15 @@ export class TodoItemComponent extends HTMLElement {
     }
 
     connectedCallback() {
+        this.contentInput.value = "Task " + this.id;
+        this.contentDisplay.innerHTML = this.contentInput.value;
+
+        TodoListDataService.AddTodoItem(
+            this.id,
+            this.contentInput.value,
+            false
+        );
+
         this.contentDisplay.addEventListener("click", (e) =>
             this.editContent(e)
         );
@@ -48,19 +60,23 @@ export class TodoItemComponent extends HTMLElement {
         this.deleteTodoItemBtn.addEventListener("click", (e) =>
             this.deleteTodoItem(e)
         );
+
+        this.todoCheck.addEventListener("click", (e) => this.toggleChecked(e));
+    }
+
+    toggleChecked(e) {
+        e.stopPropagation();
+        TodoListDataService.CheckTodoItem(this.id, e.target.checked);
     }
 
     deleteTodoItem(e) {
         e.stopPropagation();
         let todoItem = this;
         if (todoItem.parentNode) {
-            //let parentSwimLane = task.parentNode.parentNode.parentNode.host;
-            //TaskBoardDataService.deleteTask(parentSwimLane, task);
+            TodoListDataService.DeleteTodoItem(todoItem.id);
             todoItem.parentNode.removeChild(todoItem);
         }
     }
-
-    //#region Edit Content
 
     todoItemClicked(e) {
         this.mouseDownEl = e.target;
@@ -88,15 +104,19 @@ export class TodoItemComponent extends HTMLElement {
 
     saveContent(e) {
         e.stopPropagation();
+        if (this.editingContent) {
+            this.editingContent = false;
+            this.contentDisplay.innerHTML = this.contentInput.value;
 
-        this.editingContent = false;
-        this.contentDisplay.innerHTML = this.contentInput.value;
+            this.contentInput.hidden = true;
+            this.contentDisplay.hidden = false;
 
-        this.contentInput.hidden = true;
-        this.contentDisplay.hidden = false;
+            TodoListDataService.UpdateTodoItem(
+                this.id,
+                this.contentInput.value
+            );
+        }
     }
-
-    //#endregion Edit Content
 
     disconnectedCallback() {}
 }

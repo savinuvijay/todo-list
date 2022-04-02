@@ -1,3 +1,5 @@
+import { TodoListDataService } from "./services/todoListService.js";
+
 const AppTemplate = document.createElement("template");
 AppTemplate.innerHTML = `
     <style>
@@ -18,6 +20,8 @@ export class AppComponent extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(AppTemplate.content.cloneNode(true));
+
+        TodoListDataService.initilalizeState([]);
 
         this.todoList = this.shadowRoot.querySelector(".todo-list-container");
         this.todos = this.todoList.querySelector(".todos");
