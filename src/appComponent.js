@@ -8,7 +8,7 @@ AppTemplate.innerHTML = `
     <div class="app-component">
         <div class="todo-list-container">
             <h1>Todo List</h1>
-            <div class="todos">
+            <div class="todo-items">
             </div>
             <button class="add-todo-item-btn">+</button>
         </div>
@@ -24,7 +24,7 @@ export class AppComponent extends HTMLElement {
         TodoListDataService.initilalizeState([]);
 
         this.todoList = this.shadowRoot.querySelector(".todo-list-container");
-        this.todos = this.todoList.querySelector(".todos");
+        this.todoItems = this.todoList.querySelector(".todo-items");
         this.addTodoItemBtn = this.todoList.querySelector(".add-todo-item-btn");
     }
 
@@ -41,7 +41,7 @@ export class AppComponent extends HTMLElement {
         AppComponent.todoIdCount = AppComponent.todoIdCount ?? 0;
         todoItem.id = AppComponent.todoIdCount++;
 
-        this.todos.appendChild(todoItem);
+        this.todoItems.appendChild(todoItem);
     }
 
     disconnectedCallback() {}
