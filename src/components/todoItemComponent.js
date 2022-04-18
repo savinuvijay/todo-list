@@ -64,36 +64,6 @@ export class TodoItemComponent extends HTMLElement {
         this.todoCheck.addEventListener("click", (e) => this.toggleChecked(e));
     }
 
-    toggleChecked(e) {
-        e.stopPropagation();
-        TodoListDataService.CheckTodoItem(this.id, e.target.checked);
-    }
-
-    deleteTodoItem(e) {
-        e.stopPropagation();
-        let todoItem = this;
-        if (todoItem.parentNode) {
-            TodoListDataService.DeleteTodoItem(todoItem.id);
-            todoItem.parentNode.removeChild(todoItem);
-        }
-    }
-
-    todoItemClicked(e) {
-        this.mouseDownEl = e.target;
-    }
-
-    documentClicked(e) {
-        if (
-            !this.mouseDownEl ||
-            (this.mouseDownEl &&
-                !this.mouseDownEl.matches(".content-input") &&
-                this.editingContent)
-        ) {
-            this.saveContent(e);
-        }
-        this.mouseDownEl = null;
-    }
-
     editContent(e) {
         e.stopPropagation();
 
@@ -102,21 +72,50 @@ export class TodoItemComponent extends HTMLElement {
         this.contentDisplay.hidden = true;
     }
 
+    todoItemClicked(e) {
+        this.mouseDownEl = e.target;
+    }
+
+    documentClicked(e) {
+        if (
+            this.editingContent &&
+            (!this.mouseDownEl ||
+                (this.mouseDownEl &&
+                    !this.mouseDownEl.matches(".content-input")))
+        ) {
+            this.saveContent(e);
+        }
+        this.mouseDownEl = null;
+    }
+
     saveContent(e) {
         e.stopPropagation();
-        if (this.editingContent) {
-            this.editingContent = false;
-            this.contentDisplay.innerHTML = this.contentInput.value;
+        this.editingContent = false;
+        this.contentDisplay.innerHTML = this.contentInput.value;
 
-            this.contentInput.hidden = true;
-            this.contentDisplay.hidden = false;
+        this.contentInput.hidden = true;
+        this.contentDisplay.hidden = false;
 
-            TodoListDataService.UpdateTodoItem(
-                this.id,
-                this.contentInput.value
-            );
+        TodoListDataService.UpdateTodoItem(this.id, this.contentInput.value);
+    }
+
+    toggleChecked(e) {
+        e.stopPropagation();
+        TodoListDataService.CheckTodoItem(this.id, e.target.checked);
+    }
+
+    deleteTodoItem(e) {
+        e.stopPropagation();
+        let todoItem = this;
+        if (todoItem.parentNode && todoItem.parentNode.matches(".todo-items")) {
+            TodoListDataService.DeleteTodoItem(todoItem.id);
+            todoItem.parentNode.removeChild(todoItem);
         }
     }
 
-    disconnectedCallback() {}
+    disconnectedCallback() {
+        this.todoCheck.removeEventListener("click", (e) =>
+            this.toggleChecked(e)
+        );
+    }
 }

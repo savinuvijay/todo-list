@@ -15,14 +15,14 @@ export class TodoListDataService {
     }
 
     static UpdateTodoItem(id, value) {
-        let task = this.state.find((t) => t.id === id);
-        task.value = value;
+        let todoItem = this.state.find((t) => t.id === id);
+        todoItem.value = value;
         console.log(this.state);
     }
 
     static CheckTodoItem(id, checked) {
-        let task = this.state.find((t) => t.id === id);
-        task.checked = checked;
+        let todoItem = this.state.find((t) => t.id === id);
+        todoItem.checked = checked;
         console.log(this.state);
     }
 
