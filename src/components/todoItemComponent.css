@@ -23,11 +23,13 @@
     border-radius: 3px;
     font-weight: bold;
     height: 20px;
+    width: 155px;
     box-shadow: var(--shadow);
 }
 
 .delete-todo-item-btn {
     padding: 0 5px;
+    margin-right: 5px;
     border-radius: 3px;
     font-weight: 500;
     font-size: 1.2rem;
@@ -35,7 +37,7 @@
     background: var(--accent-color);
     box-shadow: var(--shadow);
     color: var(--primary-color);
-    transition: all 500ms;
+    transition: background 500ms;
 }
 
 .delete-todo-item-btn:hover {
@@ -44,4 +46,12 @@
 
 .delete-todo-item-btn:active {
     background: var(--button-accent-active);
+}
+
+.strike-through {
+    text-decoration: line-through;
+}
+
+input[type=checkbox] {
+    zoom: 1.7;
 }

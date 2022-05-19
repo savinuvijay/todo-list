@@ -66,10 +66,12 @@ export class TodoItemComponent extends HTMLElement {
 
     editContent(e) {
         e.stopPropagation();
-
-        this.editingContent = true;
-        this.contentInput.hidden = false;
-        this.contentDisplay.hidden = true;
+        if (!this.todoCheck.checked) {
+            this.editingContent = true;
+            this.contentInput.hidden = false;
+            this.contentInput.select();
+            this.contentDisplay.hidden = true;
+        }
     }
 
     todoItemClicked(e) {
@@ -101,6 +103,11 @@ export class TodoItemComponent extends HTMLElement {
 
     toggleChecked(e) {
         e.stopPropagation();
+        if (e.target.checked) {
+            this.contentDisplay.classList.add("strike-through");
+        } else {
+            this.contentDisplay.classList.remove("strike-through");
+        }
         TodoListDataService.CheckTodoItem(this.id, e.target.checked);
     }
 
